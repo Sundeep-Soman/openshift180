@@ -1,0 +1,9 @@
+oc get istag versioned-hello:1 -o jsonpath='{.tag.from.name}{"\n"}'
+
+oc set triggers deployment/version --from-image versioned-hello:1 --containers versioned-hello
+
+oc get deployment version -o jsonpath='{.metadata.annotations.image\.openshift\.io/triggers}' | jq .
+
+oc tag registry.ocp4.example.com:8443/redhattraining/versioned-hello:1-125 versioned-hello:1
+
+oc tag registry.ocp4.example.com:8443/redhattraining/versioned-hello@sha256:66e0a9c7341e52de04c8cc0c611d6a6073de183f44a7c4af80eacf3ecb5a105e versioned-hello:1

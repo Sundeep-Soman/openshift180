@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: long-load
+spec:
+  containers:
+  - image: registry.ocp4.example.com:8443/redhattraining/long-load:v1
+    imagePullPolicy: Always
+    securityContext:
+      allowPrivilegeEscalation: false
+    name: long-load
+  restartPolicy: Always

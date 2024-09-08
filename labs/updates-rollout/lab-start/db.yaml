@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mydb
+  name: mydb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mydb
+  template:
+    metadata:
+      labels:
+        app: mydb
+    spec:
+      containers:
+      - image: registry.ocp4.example.com:8443/rhel9/mysql-80:1-224
+        name: mysql-80
+        env:
+        - name: MYSQL_USER
+          value: operator1
+        - name: MYSQL_PASSWORD
+          value: test
+        - name: MYSQL_DATABASE
+          value: quotes

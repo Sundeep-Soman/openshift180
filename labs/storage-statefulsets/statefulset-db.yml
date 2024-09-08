@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: <CHANGE_ME>
+spec:
+  selector:
+    matchLabels:
+      app: <CHANGE_ME>
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: <CHANGE_ME>
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: <CHANGE_ME>
+          image: registry.ocp4.example.com:8443/redhattraining/mysql-app:v1
+          ports:
+            - name: database
+              containerPort: 3306
+          env:
+            - name: MYSQL_USER
+              value: "redhat"
+            - name: MYSQL_PASSWORD
+              value: "redhat123"
+            - name: MYSQL_DATABASE
+              value: "sakila"
+          volumeMounts:
+            - name: <CHANGE_ME>
+              mountPath: <CHANGE_ME>
+  volumeClaimTemplates:
+    - metadata:
+        name: <CHANGE_ME>
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "<CHANGE_ME>"
+        resources:
+          requests:
+            storage: 1Gi

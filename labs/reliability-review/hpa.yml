@@ -1,0 +1,17 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: longload
+  labels:
+    app: longload
+spec:
+  maxReplicas: <CHANGE_ME>
+  minReplicas: <CHANGE_ME>
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: longload
+  metrics:
+  - type: Resource
+    resource:
+      <CHANGE_ME>

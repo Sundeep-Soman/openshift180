@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: leakapp
+  name: leakapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leakapp
+  template:
+    metadata:
+      labels:
+        app: leakapp
+    spec:
+      containers:
+      - image: registry.ocp4.example.com:8443/ubi8/python-39:latest
+        name: leakapp
+        command:
+        - python3
+        - -c
+        - |
+          import time
+          a=[]
+          while True:
+            a.append(' '*1024*1024)
+            time.sleep(1)
+        resources:
+          requests:
+            memory: 20Mi
+          limits:
+            memory: 35Mi

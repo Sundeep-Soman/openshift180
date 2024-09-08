@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: long-load
+  labels:
+    app: long-load
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: long-load
+  template:
+    metadata:
+      labels:
+        app: long-load
+    spec:
+      containers:
+      - image: registry.ocp4.example.com:8443/redhattraining/long-load:v1
+        resources:
+          requests:
+            memory: 1G
+        imagePullPolicy: Always
+        name: long-load
+        startupProbe:
+          failureThreshold: 30
+          periodSeconds: 3
+          httpGet:
+            path: /health
+            port: 3000
+        livenessProbe:
+          failureThreshold: 3
+          periodSeconds: 3
+          httpGet:
+            path: /health
+            port: 3000
+        env:
+        - name: START_DELAY
+          value: "0"
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: long-load
+  labels:
+    app: long-load
+spec:
+  selector:
+    app: long-load
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: long-load
+  labels:
+    app: long-load
+spec:
+  port:
+    targetPort: 3000
+  to:
+    kind: Service
+    name: long-load

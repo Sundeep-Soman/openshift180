@@ -1,0 +1,13 @@
+mysql --user=operator1 --password=test -e "SHOW DATABASES"
+
+oc get pod <POD_NAME> -o jsonpath='{.spec.containers[0].image}{"\n"}'
+
+oc set env deployment/mydb MYSQL_PASSWORD=redhat123
+
+oc set image deployment/mydb mysql-80=registry.ocp4.example.com:8443/rhel9/mysql-80:1-228
+
+oc get replicaset <NAME> -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
+
+oc get deployment version -o jsonpath='{.spec.template.spec.containers[0].readinessProbe}' | jq .
+
+oc set image deployment/version versioned-hello=registry.ocp4.example.com:8443/redhattraining/versioned-hello:v1.1
